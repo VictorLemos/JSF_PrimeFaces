@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="_template.xhtml">
+	<ui:define name="titulo">
+		Novo Autor
+		</ui:define>
+	<ui:define name="conteudo">
+		<h:form id="autor">
+			<p:growl autoUpdate="true" />
+			<p:fieldset legend="Dados do Autor">
+				<p:panelGrid columns="2">
+					<h:outputLabel value="Nome:" for="nome" />
+					<h:inputText id="nome" value="#{autorBean.autor.nome}" />
+					<f:facet name="footer">
+						<h:commandButton value="Gravar"
+							actionListener="#{autorBean.salvar}" />
+					</f:facet>
+					<br />
+					<h:commandLink value="Cadastrar Novo Livro"
+						action="#{autorBean.formLivro}" immediate="true" />
+				</p:panelGrid>
+			</p:fieldset>
+
+			<p:fieldset legend="Lista de autores">
+				<p:dataTable value="#{autorBean.autores}" var="autor"
+					id="tabelaDeAutor">
+
+					<p:column>
+						<f:facet name="header">ID</f:facet>
+						<h:outputText value="#{autor.id}" id="id" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">Autor</f:facet>
+						<h:outputText value="#{autor.nome}" id="nome" />
+					</p:column>
+
+					<p:column headerText="Editar - Excluir" style="text-align: center">
+
+						<p:commandButton title="Editar" icon="ui-icon-pencil"  action="#{autorBean.salvar}"/>
+
+						<p:commandButton title="Excluir" onclick="confirmation.show()"
+							icon="ui-icon-trash" />
+
+					</p:column>
+
+					<p:column>
+						<p:dialog id="confirmDialog" header="Atenção !" severity="alert"
+							widgetVar="confirmation" showEffect="explode" hideEffect="bounce"
+							appendToBody="@(body)" modal="true" resizable="false">
+
+							<h:outputText value="Você deseja excluir esse Autor ?" />
+							<br />
+							<br />
+
+							<p:commandButton value="Ainda Não" onclick="confirmation.hide()"
+								type="button" immediate="true" />
+
+							<p:commandButton value="Sim" update="tabelaDeAutor"
+								action="#{autorBean.remover(autor.id)}" />
+
+						</p:dialog>
+					</p:column>
+					
+				</p:dataTable>
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
